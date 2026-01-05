@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelControl : MonoBehaviour
 {
+    [SerializeField] private SpawnCandyControl _spawnCandyControl;
     [SerializeField] private SpawnFigControl _spawnFigControl;
     [SerializeField] private Vector3 _basePointCollectFigure;
 
@@ -13,7 +14,7 @@ public class LevelControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateCollectFigures();
+        Invoke("CreateCollectFigures", 1f);
     }
 
     // Update is called once per frame

@@ -46,7 +46,7 @@ public class CandyControl : MonoBehaviour
         }
     }
 
-    public void SetTarget(Vector3 tg, bool isRot)
+    public void SetTarget(Vector3 tg, bool isRot = false)
     {
         _target = tg;
         _isMove = true;
