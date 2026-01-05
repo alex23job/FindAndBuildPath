@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 436437698664443063}
   - component: {fileID: 1176559849162282676}
   - component: {fileID: 647656890229390142}
+  - component: {fileID: 7733979056369467641}
   m_Layer: 0
   m_Name: TailBody
   m_TagString: Untagged
@@ -107,6 +108,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.01, y: 0.010000003, z: 0.0051367935}
   m_Center: {x: 0, y: -2.0383521e-12, z: 0.00006839576}
+--- !u!114 &7733979056369467641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4190452901578106173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f32b819631a4c40b940fd762c55839, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4291868103653862029
 GameObject:
   m_ObjectHideFlags: 0

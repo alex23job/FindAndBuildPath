@@ -52,6 +52,7 @@ public class CollectFigControl : MonoBehaviour
         _shema = new ShemaFigure(arr);
         _target = pos;
         Vector3 posTail = Vector3.zero;
+        CollectFigControl figControl = gameObject.GetComponent<CollectFigControl>();
         for (int i = 0; i < arr.Length; i++)
         {
             if (arr[i] != 0)
@@ -63,9 +64,38 @@ public class CollectFigControl : MonoBehaviour
                 GameObject tail = Instantiate(prefabTailBody);
                 tail.transform.parent = transform;
                 tail.transform.localPosition = posTail;
+                TailFigure tailFigure = tail.GetComponentInChildren<TailFigure>();
+                if (tailFigure != null)
+                {
+                    tailFigure.SetCollectFigControl(i, figControl);
+                }
+                tails.Add(tail);
             }
         }
         transform.rotation = Quaternion.Euler(new Vector3(30f, 0, 0));
         _isMove = true;
+    }
+
+    public bool CheckCandy(int id)
+    {
+        if (_candyID == -1)
+        {
+            _candyID = id;
+        }
+        else if (_candyID != id)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool CheckFull()
+    {
+        foreach (GameObject tail in tails)
+        {
+            TailFigure tailFigure = tail.GetComponentInChildren<TailFigure>();
+        }
+        return true;
     }
 }
