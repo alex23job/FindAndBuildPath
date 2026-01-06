@@ -7,6 +7,7 @@ public class CollectFigControl : MonoBehaviour
     [SerializeField] private GameObject prefabTailBody;
     [SerializeField] private float speed;
 
+    private SpawnFigControl _spawnFigControl = null;
     private ShemaFigure _shema = null;
     private int _candyID = -1;
     private int _figureID = -1;
@@ -46,8 +47,9 @@ public class CollectFigControl : MonoBehaviour
         return _shema.GetShema();
     }
 
-    public void SetShema(int id, int[] arr, Vector3 pos)
+    public void SetShema(int id, int[] arr, Vector3 pos, SpawnFigControl scc)
     {
+        _spawnFigControl = scc;
         _figureID = id;
         _shema = new ShemaFigure(arr);
         _target = pos;
@@ -76,21 +78,22 @@ public class CollectFigControl : MonoBehaviour
         _isMove = true;
     }
 
-    public bool CheckCandy(int id)
+    public bool CheckCandy(Vector3 pos)
     {
-        if (_candyID == -1)
+        bool res = false;
+        if (_spawnFigControl != null)
         {
-            _candyID = id;
+            res = _spawnFigControl.CheckCandy(_candyID, pos, _figureID);
         }
-        else if (_candyID != id)
-        {
-            return false;
-        }
-
-        return true;
+        return res;
     }
 
-    private bool CheckFull()
+    public void SetCandyID(int id)
+    {
+        _candyID = id;
+    }
+
+    public bool CheckFull()
     {
         foreach (GameObject tail in tails)
         {

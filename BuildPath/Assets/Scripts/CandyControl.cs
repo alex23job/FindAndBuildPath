@@ -52,4 +52,14 @@ public class CandyControl : MonoBehaviour
         _isMove = true;
         _isRotation = isRot;
     }
+
+    public bool CmpCandyID(int id)
+    {
+        return _candyID == id;
+    }
+
+    public void RemoveCandy()
+    {
+        Destroy(gameObject);
+    }
 }

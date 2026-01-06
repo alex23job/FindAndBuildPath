@@ -41,7 +41,7 @@ public class SpawnCandyControl : MonoBehaviour
         {
             target = _candys[i].transform.position;
             target.x += 1f;
-            print($"i={i}  pos=<{_candys[i].transform.position}>  tg=<{target}>");
+            //print($"i={i}  pos=<{_candys[i].transform.position}>  tg=<{target}>");
             CandyControl candyControl = _candys[i].GetComponent<CandyControl>();
             if (candyControl != null)
             {

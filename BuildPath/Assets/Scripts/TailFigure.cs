@@ -34,7 +34,7 @@ public class TailFigure : MonoBehaviour
         if (_isCandy) return;
         if (_figControl != null)
         {
-            _isCandy = _figControl.CheckCandy(0);
+            _isCandy = _figControl.CheckCandy(transform.position);
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpawnFigControl : MonoBehaviour
 {
+    [SerializeField] private LevelControl _levelControl;
     [SerializeField] private GameObject _prefabCollectFigure;
     [SerializeField] private float _shiftX = 4f;
     [SerializeField] private float _shiftY = 4f;
@@ -37,7 +38,46 @@ public class SpawnFigControl : MonoBehaviour
     {
         GameObject fig = Instantiate(_prefabCollectFigure, transform.position, Quaternion.identity);
         int numShema = Random.Range(0, ShemaFigure.MaxShemaCounts);
-        fig.GetComponent<CollectFigControl>().SetShema(num, ShemaFigure.GetShemaOrder(numShema).GetShema(), _spawnPoints[num]);
+        fig.GetComponent<CollectFigControl>().SetShema(num, ShemaFigure.GetShemaOrder(numShema).GetShema(), _spawnPoints[num], gameObject.GetComponent<SpawnFigControl>());
         _figures[num] = fig;
+    }
+
+    public bool CheckCandy(int candyID, Vector3 pos, int figureNum)
+    {
+        bool res = false;
+        GameObject curCandy = null;
+        if (_levelControl != null)
+        {
+            curCandy = _levelControl.GetCurrentCandy();
+            CandyControl candyControl = curCandy.GetComponent<CandyControl>();
+            if (candyControl != null)
+            {
+                CollectFigControl cfc = _figures[figureNum].GetComponent<CollectFigControl>();
+                Vector3 target = pos;
+                target.z -= 0.2f; target.y += 0.15f;
+                if (candyID == -1)
+                {   //  первая конфета для фигуры
+                    cfc.SetCandyID(candyID);
+                    candyControl.SetTarget(target, true);
+                    res = true;
+                }
+                else if (candyControl.CmpCandyID(candyID))
+                {   //  в фигуре тип конфет совпал с текущей конфетой - добавляем
+                    candyControl.SetTarget(target, true);
+                    res = true;
+                }
+                else
+                {   //  тип конфет не совпал - удаляем текущую конфету ???
+                    candyControl.RemoveCandy();
+                }
+                if (cfc.CheckFull())
+                {   //  фигура заполнена
+
+                }
+            }
+            _levelControl.SpawnNextCandy();
+        }
+
+        return res;
     }
 }

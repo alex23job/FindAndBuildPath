@@ -31,4 +31,14 @@ public class LevelControl : MonoBehaviour
             _spawnFigControl.CreateFigure(i);
         }
     }
+
+    public GameObject GetCurrentCandy()
+    {
+        return _spawnCandyControl.CurrentCandy;
+    }
+
+    public void SpawnNextCandy()
+    {
+        _spawnCandyControl.GenerateNextCandy();
+    }
 }
