@@ -907,6 +907,7 @@ MonoBehaviour:
   _prefabCollectFigure: {fileID: 6579492227322176566, guid: 6b729638db9347848858fe0dc61995ec, type: 3}
   _shiftX: 2.4
   _shiftY: 1.4
+  _basketPoint: {x: 0, y: 0.5, z: 9}
 --- !u!4 &1516559646
 Transform:
   m_ObjectHideFlags: 0

@@ -58,8 +58,9 @@ public class CandyControl : MonoBehaviour
         return _candyID == id;
     }
 
-    public void RemoveCandy()
+    public void RemoveCandy(Vector3 tg)
     {
-        Destroy(gameObject);
+        SetTarget(tg, true);
+        Destroy(gameObject, 2f);
     }
 }

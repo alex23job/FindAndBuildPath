@@ -8,6 +8,7 @@ public class SpawnFigControl : MonoBehaviour
     [SerializeField] private GameObject _prefabCollectFigure;
     [SerializeField] private float _shiftX = 4f;
     [SerializeField] private float _shiftY = 4f;
+    [SerializeField] private Vector3 _basketPoint;
 
     private List<Vector3> _spawnPoints = new List<Vector3>();
     private List<GameObject> _figures = new List<GameObject>();
@@ -57,7 +58,7 @@ public class SpawnFigControl : MonoBehaviour
                 target.z -= 0.2f; target.y += 0.15f;
                 if (candyID == -1)
                 {   //  первая конфета для фигуры
-                    cfc.SetCandyID(candyID);
+                    cfc.SetCandyID(candyControl.CandyID);
                     candyControl.SetTarget(target, true);
                     res = true;
                 }
@@ -68,7 +69,7 @@ public class SpawnFigControl : MonoBehaviour
                 }
                 else
                 {   //  тип конфет не совпал - удаляем текущую конфету ???
-                    candyControl.RemoveCandy();
+                    candyControl.RemoveCandy(_basketPoint);
                 }
                 if (cfc.CheckFull())
                 {   //  фигура заполнена
