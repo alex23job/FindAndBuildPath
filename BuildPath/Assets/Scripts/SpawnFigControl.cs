@@ -39,7 +39,7 @@ public class SpawnFigControl : MonoBehaviour
     {
         GameObject fig = Instantiate(_prefabCollectFigure, transform.position, Quaternion.identity);
         int numShema = Random.Range(0, ShemaFigure.MaxShemaCounts);
-        fig.GetComponent<CollectFigControl>().SetShema(num, ShemaFigure.GetShemaOrder(numShema).GetShema(), _spawnPoints[num], gameObject.GetComponent<SpawnFigControl>());
+        fig.GetComponent<CollectFigControl>().SetShema(num, ShemaFigure.GetShemaOrder(numShema).GetShema(), _spawnPoints[num], gameObject.GetComponent<SpawnFigControl>(), numShema);
         _figures[num] = fig;
     }
 
@@ -60,11 +60,13 @@ public class SpawnFigControl : MonoBehaviour
                 {   //  первая конфета для фигуры
                     cfc.SetCandyID(candyControl.CandyID);
                     candyControl.SetTarget(target, true);
+                    cfc.AddCandy(curCandy);
                     res = true;
                 }
                 else if (candyControl.CmpCandyID(candyID))
                 {   //  в фигуре тип конфет совпал с текущей конфетой - добавляем
                     candyControl.SetTarget(target, true);
+                    cfc.AddCandy(curCandy);
                     res = true;
                 }
                 else
@@ -73,7 +75,13 @@ public class SpawnFigControl : MonoBehaviour
                 }
                 if (cfc.CheckFull())
                 {   //  фигура заполнена
-
+                    //print($"CheckFull => true   figureNum={figureNum}  candyID={candyID}");
+                    _levelControl.GenerateDoorFigure(cfc.GetShema(), _figures[figureNum].transform.position, cfc.NumberShema);
+                    cfc.RemoveChild();
+                    GameObject figure = _figures[figureNum];
+                    _figures[figureNum] = null;
+                    Destroy(figure, 0.3f);
+                    CreateFigure(figureNum);
                 }
             }
             _levelControl.SpawnNextCandy();

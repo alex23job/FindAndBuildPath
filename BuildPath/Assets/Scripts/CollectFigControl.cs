@@ -9,13 +9,16 @@ public class CollectFigControl : MonoBehaviour
 
     private SpawnFigControl _spawnFigControl = null;
     private ShemaFigure _shema = null;
+    private int _numShema = -1;
     private int _candyID = -1;
     private int _figureID = -1;
     private List<GameObject> tails = new List<GameObject>();
     private Vector3 _target = Vector3.zero;
     private bool _isMove = false;
+    private List<GameObject> candys = new List<GameObject>();
 
     public int FigureID {  get { return _figureID; } }
+    public int NumberShema { get { return _numShema; } }
 
     // Start is called before the first frame update
     void Start()
@@ -47,8 +50,9 @@ public class CollectFigControl : MonoBehaviour
         return _shema.GetShema();
     }
 
-    public void SetShema(int id, int[] arr, Vector3 pos, SpawnFigControl scc)
+    public void SetShema(int id, int[] arr, Vector3 pos, SpawnFigControl scc, int numShema)
     {
+        _numShema = numShema;
         _spawnFigControl = scc;
         _figureID = id;
         _shema = new ShemaFigure(arr);
@@ -93,12 +97,28 @@ public class CollectFigControl : MonoBehaviour
         _candyID = id;
     }
 
+    public void AddCandy(GameObject candy)
+    {
+        candys.Add(candy);
+    }
+
     public bool CheckFull()
     {
-        foreach (GameObject tail in tails)
+        return tails.Count == candys.Count;
+        /*foreach (GameObject tail in tails)
         {
             TailFigure tailFigure = tail.GetComponentInChildren<TailFigure>();
+            if (tailFigure != null && tailFigure.IsCandy == false) return false;
         }
-        return true;
+        return true;*/
+    }
+
+    public void RemoveChild()
+    {
+        int i;
+        for (i = tails.Count - 1; i >= 0; i--) Destroy(tails[i], 0.2f);
+        tails.Clear();
+        for (i = candys.Count - 1; i >= 0; i--) Destroy(candys[i], 0.2f);
+        candys.Clear();
     }
 }

@@ -33,6 +33,8 @@ public class CandyControl : MonoBehaviour
                 if (_isRotation)
                 {
                     Vector3 rot = transform.rotation.eulerAngles;
+                    rot.x += Time.deltaTime * _speedRotation * 0.7f;
+                    rot.y += Time.deltaTime * _speedRotation * 0.5f;
                     rot.z += Time.deltaTime * _speedRotation;
                     transform.rotation = Quaternion.Euler(rot);
                 }

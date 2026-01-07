@@ -8,7 +8,7 @@ public class SpawnCandyControl : MonoBehaviour
 
     private List<GameObject> _candys = new List<GameObject>();
     private GameObject _currentCandy = null;
-    private int _maxCountCandys = 5;
+    private int _maxCountCandys = 9;
 
     public GameObject CurrentCandy { get { return _currentCandy; } }
 
