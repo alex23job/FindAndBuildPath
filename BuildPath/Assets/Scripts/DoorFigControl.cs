@@ -70,6 +70,12 @@ public class DoorFigControl : MonoBehaviour
             }
         }
         //transform.rotation = Quaternion.Euler(new Vector3(30f, 0, 0));
+        gameObject.SetActive(false);
+    }
+
+    public void ViewAndMove()
+    {
+        gameObject.SetActive(true);
         _isMove = true;
     }
 }

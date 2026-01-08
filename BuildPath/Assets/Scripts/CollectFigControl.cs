@@ -116,9 +116,17 @@ public class CollectFigControl : MonoBehaviour
     public void RemoveChild()
     {
         int i;
-        for (i = tails.Count - 1; i >= 0; i--) Destroy(tails[i], 0.2f);
+        for (i = tails.Count - 1; i >= 0; i--)
+        {
+            tails[i].GetComponentInChildren<TailFigure>().SetRemove();
+            Destroy(tails[i], 0.5f);
+        }
         tails.Clear();
-        for (i = candys.Count - 1; i >= 0; i--) Destroy(candys[i], 0.2f);
+        for (i = candys.Count - 1; i >= 0; i--)
+        {
+            candys[i].GetComponent<CandyControl>().SetRemove();
+            Destroy(candys[i], 0.5f);
+        }
         candys.Clear();
     }
 }

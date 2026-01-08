@@ -12,6 +12,8 @@ public class LevelControl : MonoBehaviour
     private int _maxSpawnPoints = 6;
     private int _levelSpawnPoints = 6;
 
+    private List<GameObject> doorFigures = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +54,17 @@ public class LevelControl : MonoBehaviour
             Vector3 target = pos;
             target.z = 0;target.y = 0.8f;
             dfc.SetShema(numShema, arr, target, gameObject.GetComponent<LevelControl>());
+        }
+        doorFigures.Add(doorFig);
+        Invoke("MoveNextDoorFigure", 1.5f);
+    }
+
+    private void MoveNextDoorFigure()
+    {
+        DoorFigControl dfc = doorFigures[doorFigures.Count - 1].GetComponent<DoorFigControl>();
+        if (dfc != null)
+        {
+            dfc.ViewAndMove();
         }
     }
 }

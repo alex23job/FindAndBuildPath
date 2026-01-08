@@ -7,6 +7,9 @@ public class TailFigure : MonoBehaviour
     private CollectFigControl _figControl = null;
     private int _tailID = -1;
     private bool _isCandy = false;
+    private bool _isRemove = false;
+    private Vector3 _startSize;
+    private int _prc = 100;
 
     public int TailID { get { return _tailID; } }
     public bool IsCandy {  get { return _isCandy; } }
@@ -20,7 +23,18 @@ public class TailFigure : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (_isRemove)
+        {
+            if (_prc > 0)
+            {
+                _prc -= 1;
+                transform.localScale = _startSize * _prc / 100f;
+            }
+            else
+            {
+                _isRemove = false;
+            }
+        }
     }
 
     public void SetCollectFigControl(int id, CollectFigControl collect)
@@ -36,5 +50,11 @@ public class TailFigure : MonoBehaviour
         {
             _isCandy = _figControl.CheckCandy(transform.position);
         }
+    }
+
+    public void SetRemove()
+    {
+        _startSize = transform.localScale;
+        _isRemove = true;
     }
 }

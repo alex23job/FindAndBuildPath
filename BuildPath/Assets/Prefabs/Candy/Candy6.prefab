@@ -97,5 +97,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _candyID: 6
-  _speed: 5
-  _speedRotation: 45
+  _speed: 10
+  _speedRotation: 90

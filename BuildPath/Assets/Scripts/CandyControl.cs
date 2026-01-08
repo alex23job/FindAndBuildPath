@@ -5,13 +5,18 @@ using UnityEngine;
 public class CandyControl : MonoBehaviour
 {
     [SerializeField] private int _candyID = -1;
-    [SerializeField] private float _speed = 5f;
-    [SerializeField] private float _speedRotation = 45f;
+    [SerializeField] private float _speed = 10f;
+    [SerializeField] private float _speedRotation = 90f;
 
     private bool _isMove = false;
     private bool _isRotation = false;
     private Vector3 _target;
     private Vector3 _angles;
+
+    private bool _isRemove = false;
+    private Vector3 _startSize;
+    private int _prc = 100;
+
     public int CandyID {  get { return _candyID; } }
 
     // Start is called before the first frame update
@@ -46,6 +51,18 @@ public class CandyControl : MonoBehaviour
                 _isMove = false;
             }
         }
+        if (_isRemove)
+        {
+            if (_prc > 0)
+            {
+                _prc -= 1;
+                transform.localScale = _startSize * _prc / 100f;
+            }
+            else
+            {
+                _isRemove = false;
+            }
+        }
     }
 
     public void SetTarget(Vector3 tg, bool isRot = false)
@@ -64,5 +81,11 @@ public class CandyControl : MonoBehaviour
     {
         SetTarget(tg, true);
         Destroy(gameObject, 2f);
+        Invoke("SetRemove", 1f);
+    }
+    public void SetRemove()
+    {
+        _startSize = transform.localScale;
+        _isRemove = true;
     }
 }
