@@ -53,7 +53,7 @@ public class DoorFigControl : MonoBehaviour
             Vector3 mp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 figPos = transform.position;
             //figPos.x += mp.x - deltaPos.x; figPos.z += 1.35f * (mp.z - deltaPos.z);
-            figPos.x += mp.x - _deltaPos.x; figPos.z += mp.z - _deltaPos.z;
+            figPos.x += mp.x - _deltaPos.x; figPos.z += 4 * (mp.z - _deltaPos.z);
             transform.position = figPos;
             _deltaPos = mp;
         }
@@ -119,7 +119,7 @@ public class DoorFigControl : MonoBehaviour
             if (delta.magnitude < 0.1f && _isTurn)
             {
                 _shema.Rotate90();
-                transform.Rotate(0, 0, 90, Space.World);
+                transform.Rotate(0, 90, 0, Space.World);
                 transform.position = _startPos;
                 //return;
                 /*Vector3 rot = transform.rotation.eulerAngles;
