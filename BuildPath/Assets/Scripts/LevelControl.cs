@@ -72,4 +72,9 @@ public class LevelControl : MonoBehaviour
             }
         }
     }
+
+    public bool TestPacking(GameObject door)
+    {
+        return false;
+    }
 }
