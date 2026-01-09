@@ -13,8 +13,10 @@ public class DoorFigControl : MonoBehaviour
     private List<GameObject> tails = new List<GameObject>();
     private Vector3 _target = Vector3.zero;
     private bool _isMove = false;
+    private bool _isNew = true;
 
     public int FigureID { get { return _figureID; } }
+    public bool IsNew { get { return _isNew; } }
 
     // Start is called before the first frame update
     void Start()
@@ -77,6 +79,7 @@ public class DoorFigControl : MonoBehaviour
     {
         gameObject.SetActive(true);
         _isMove = true;
+        _isNew = false;
     }
 }
 

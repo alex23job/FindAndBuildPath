@@ -13,7 +13,7 @@ public class SpawnFigControl : MonoBehaviour
     private List<Vector3> _spawnPoints = new List<Vector3>();
     private List<GameObject> _figures = new List<GameObject>();
 
-    private GameObject _completeFigure = null;
+    private List<GameObject> _completeFigures = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -80,7 +80,7 @@ public class SpawnFigControl : MonoBehaviour
                     //print($"CheckFull => true   figureNum={figureNum}  candyID={candyID}");
                     _levelControl.GenerateDoorFigure(cfc.GetShema(), _figures[figureNum].transform.position, cfc.NumberShema);
                     
-                    _completeFigure = _figures[figureNum];
+                    _completeFigures.Add(_figures[figureNum]);
                     _figures[figureNum] = null;
                     
                     CreateFigure(figureNum);
@@ -95,8 +95,10 @@ public class SpawnFigControl : MonoBehaviour
 
     private void RemoveCompleteFigure()
     {
-        CollectFigControl cfc = _completeFigure.GetComponent<CollectFigControl>();
+        CollectFigControl cfc = _completeFigures[0].GetComponent<CollectFigControl>();
         cfc.RemoveChild();
-        Destroy(_completeFigure, 0.15f);
+        GameObject fig = _completeFigures[0];
+        _completeFigures.RemoveAt(0);
+        Destroy(fig, 0.15f);
     }
 }

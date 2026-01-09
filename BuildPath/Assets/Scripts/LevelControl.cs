@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class LevelControl : MonoBehaviour
@@ -61,10 +62,14 @@ public class LevelControl : MonoBehaviour
 
     private void MoveNextDoorFigure()
     {
-        DoorFigControl dfc = doorFigures[doorFigures.Count - 1].GetComponent<DoorFigControl>();
-        if (dfc != null)
+        for (int i = 0; i < doorFigures.Count; i++)
         {
-            dfc.ViewAndMove();
+            //DoorFigControl dfc = doorFigures[doorFigures.Count - 1].GetComponent<DoorFigControl>();
+            DoorFigControl dfc = doorFigures[i].GetComponent<DoorFigControl>();
+            if (dfc != null && dfc.IsNew)
+            {
+                dfc.ViewAndMove();
+            }
         }
     }
 }
