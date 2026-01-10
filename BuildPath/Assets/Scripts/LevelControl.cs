@@ -85,6 +85,14 @@ public class LevelControl : MonoBehaviour
 
     public bool TestPacking(GameObject door)
     {
+        if (_levelEnviroment != null)
+        {
+            if (_levelEnviroment.CheckPacking(door))
+            {
+                doorFigures.Remove(door);
+                return true;
+            }
+        }
         return false;
     }
 }

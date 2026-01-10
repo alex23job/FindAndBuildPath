@@ -25,6 +25,8 @@ public class DoorFigControl : MonoBehaviour
     public int FigureID { get { return _figureID; } }
     public bool IsNew { get { return _isNew; } }
 
+    public List<GameObject> Tails { get { return tails; } }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +135,7 @@ public class DoorFigControl : MonoBehaviour
                 {
                     isPacking = true; 
                     _isMove = false;
+                    ClearAndDestroy();
                 }
                 else
                 {
@@ -145,5 +148,10 @@ public class DoorFigControl : MonoBehaviour
         }
     }
 
+    private void ClearAndDestroy()
+    {
+        tails.Clear();
+        Destroy(gameObject, 0.1f);
+    }
 }
 

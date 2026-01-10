@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class LevelEnviroment : MonoBehaviour
 {
+    [SerializeField] private GameObject prefabTailBody;
     [SerializeField] private GameObject[] envPrefabs;
     [SerializeField] private GameObject gridCeilPrefab;
     [SerializeField] private float ofsX;
     [SerializeField] private float ofsZ;
 
     private ShemaLevel _shemaLevel;
+
+    private int[] _doorGrid = null;
+    private GameObject[] _ceils = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +47,12 @@ public class LevelEnviroment : MonoBehaviour
                 env.transform.parent = transform;
             }
         }
+        _ceils = new GameObject[doors.Length * 26];
+        _doorGrid = new int[doors.Length * 26];
+        for (i = 0; i < _doorGrid.Length; i++)
+        {
+            _doorGrid[i] = -1;
+        }
         pos.y = 0.6f;
         for (i = 0; i < doors.Length; i++)
         {
@@ -54,8 +65,46 @@ public class LevelEnviroment : MonoBehaviour
                     pos.x = ofsX + j * 0.5f - 0.25f;
                     GameObject ceil = Instantiate(gridCeilPrefab, pos, Quaternion.identity);
                     ceil.transform.parent = transform;
+                    _ceils[26 * i + j] = ceil;
+                    _doorGrid[26 * i + j] = 0;
                 }
             }
         }
+    }
+
+    public bool CheckPacking(GameObject door)
+    {
+        DoorFigControl dfc = door.GetComponent<DoorFigControl>();
+        Vector3 pos;
+        int i, x, z, index, tailCount = 0;
+        for (i = 0; i < dfc.Tails.Count; i++)
+        {
+            pos = dfc.Tails[i].transform.position;
+            x = Mathf.RoundToInt((pos.x - ofsX + 0.25f) * 2);
+            z = Mathf.RoundToInt((ofsZ - pos.z + 0.25f) * 2);
+            index = 26 * z + x;
+            Debug.Log($"pos=<{pos}>   x={x}  z={z}   index={index}    zn={(index < _doorGrid.Length ? _doorGrid[index] : -256)}");
+            if (index >= 0 && index < _doorGrid.Length)
+            {
+                if (_doorGrid[index] == 0) tailCount++;
+            }
+        }
+        if (tailCount > 0 && tailCount == dfc.Tails.Count)
+        {
+            for (i = 0; i < dfc.Tails.Count; i++)
+            {
+                pos = dfc.Tails[i].transform.position;
+                x = Mathf.RoundToInt((pos.x - ofsX + 0.25f) * 2);
+                z = Mathf.RoundToInt((ofsZ - pos.z + 0.25f) * 2);
+                index = 26 * z + x;
+                _doorGrid[index] = 1;
+                dfc.Tails[i].transform.parent = transform;
+                dfc.Tails[i].transform.localPosition = _ceils[index].transform.localPosition;
+                Destroy(_ceils[index]);
+                _ceils[index] = dfc.Tails[i];
+            }
+            return true;
+        }
+        return false;
     }
 }
