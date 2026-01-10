@@ -7,6 +7,7 @@ public class LevelControl : MonoBehaviour
 {
     [SerializeField] private SpawnCandyControl _spawnCandyControl;
     [SerializeField] private SpawnFigControl _spawnFigControl;
+    [SerializeField] private LevelEnviroment _levelEnviroment;
     [SerializeField] private Vector3 _basePointCollectFigure;
     [SerializeField] private GameObject _doorFigPrefab;
 
@@ -15,9 +16,13 @@ public class LevelControl : MonoBehaviour
 
     private List<GameObject> doorFigures = new List<GameObject>();
 
+    private ShemaLevel _shemaLevel = null;
+
     // Start is called before the first frame update
     void Start()
     {
+        _shemaLevel = ShemaLevel.GetShemaLevel(0);  //  исправить на загрузку по данным из GM
+        CreateLevelEnviroment();
         Invoke("CreateCollectFigures", 1f);
     }
 
@@ -25,6 +30,11 @@ public class LevelControl : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void CreateLevelEnviroment()
+    {
+        _levelEnviroment.SetShemaLevel(_shemaLevel);
     }
 
     private void CreateCollectFigures()
@@ -53,7 +63,7 @@ public class LevelControl : MonoBehaviour
         if (dfc != null)
         {
             Vector3 target = pos;
-            target.z = 0;target.y = 0.8f;
+            target.x += 0.1f; target.z = 0;target.y = 0.7f;
             dfc.SetShema(numShema, arr, target, gameObject.GetComponent<LevelControl>());
         }
         doorFigures.Add(doorFig);
