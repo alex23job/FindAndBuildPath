@@ -83,7 +83,7 @@ public class LevelEnviroment : MonoBehaviour
             x = Mathf.RoundToInt((pos.x - ofsX + 0.25f) * 2);
             z = Mathf.RoundToInt((ofsZ - pos.z + 0.25f) * 2);
             index = 26 * z + x;
-            Debug.Log($"pos=<{pos}>   x={x}  z={z}   index={index}    zn={(index < _doorGrid.Length ? _doorGrid[index] : -256)}");
+            Debug.Log($"pos=<{pos}>   x={x}  z={z}   index={index}    zn={(((index >= 0) && (index < _doorGrid.Length)) ? _doorGrid[index] : -256)}");
             if (index >= 0 && index < _doorGrid.Length)
             {
                 if (_doorGrid[index] == 0) tailCount++;
@@ -106,5 +106,14 @@ public class LevelEnviroment : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public bool DoorGridFull()
+    {
+        for (int i = 0; i < _doorGrid.Length; i++)
+        {
+            if (_doorGrid[i] == 0) return false;
+        }
+        return true;
     }
 }

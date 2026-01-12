@@ -17,6 +17,7 @@ public class LevelControl : MonoBehaviour
     private List<GameObject> doorFigures = new List<GameObject>();
 
     private ShemaLevel _shemaLevel = null;
+    private bool _isDoorFull = false;
 
     // Start is called before the first frame update
     void Start()
@@ -90,9 +91,18 @@ public class LevelControl : MonoBehaviour
             if (_levelEnviroment.CheckPacking(door))
             {
                 doorFigures.Remove(door);
+                if (_levelEnviroment.DoorGridFull())
+                {   //  дорожка построена
+                    _isDoorFull = true;
+                }
                 return true;
             }
         }
         return false;
+    }
+
+    public void RemoveDoorFigure(GameObject door)
+    {
+        doorFigures.Remove(door);
     }
 }

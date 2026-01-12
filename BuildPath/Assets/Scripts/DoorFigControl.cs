@@ -16,6 +16,9 @@ public class DoorFigControl : MonoBehaviour
     private bool _isNew = true;
     private bool _isMoving = false;
     private bool _isTurn = true;
+    private bool _isMini = false;
+    private int miniPrc = 300;
+    private Vector3 _startLocalScale;
 
     private Vector3 _startPos;
     private Vector3 _deltaPos;
@@ -59,7 +62,14 @@ public class DoorFigControl : MonoBehaviour
             transform.position = figPos;
             _deltaPos = mp;
         }
-
+        if (_isMini)
+        {
+            _isMoving = false;
+            if (miniPrc > 0)
+            {
+                transform.localScale = (miniPrc-- * _startLocalScale) / 300f;
+            }
+        }
     }
     public void SetShema(int id, int[] arr, Vector3 pos, LevelControl lc)
     {
@@ -152,6 +162,18 @@ public class DoorFigControl : MonoBehaviour
     {
         tails.Clear();
         Destroy(gameObject, 0.1f);
+    }
+
+    public void MiniAndDestroy(Vector3 tg)
+    {
+        _isMini = true;
+        _target = tg;
+        _isMove = true;
+        speed = 10f;
+        if (_levelControl != null) _levelControl.RemoveDoorFigure(gameObject);
+        _startLocalScale = transform.localScale;
+        for(int i = 0; i < tails.Count; i++) Destroy(tails[i], 0.99f);
+        Destroy(gameObject, 1f);
     }
 }
 
