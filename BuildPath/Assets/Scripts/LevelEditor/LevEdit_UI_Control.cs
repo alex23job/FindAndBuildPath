@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class LevEdit_UI_Control : MonoBehaviour
 {
+    [SerializeField] private Text txtLevelName;
+
+    private ShemaLevel curLevel = null;
+
+    public ShemaLevel Level {  get { return curLevel; } }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,5 +27,16 @@ public class LevEdit_UI_Control : MonoBehaviour
     public void LoadMenuScene()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void CreateNewLevelShema()
+    {
+        curLevel = LevelList.Instance.CreateNewShema();
+        txtLevelName.text = curLevel.IDS_LEVEL; 
+    }
+
+    public void SaveLevels()
+    {
+        LevelList.Instance.SaveLevels();
     }
 }
