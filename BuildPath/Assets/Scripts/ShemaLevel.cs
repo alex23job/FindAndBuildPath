@@ -9,8 +9,8 @@ public class ShemaLevel
         if (_levels.Count == 0)
         {
             _levels.Add(new ShemaLevel(0, new int[13] { 0x0015500, 0x0006400, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[26] { 0, 0, 0, 0x3c00000, 0x3e00000, 0x3f80000, 0x1fc0000, 0x07f0000, 0x03f8000, 0x01fc000, 0x00fe000, 0x007ff00, 0x003ff80, 
-                                0x001ffc0, 0x000ffe0, 0x000fff0, 0x0007fff, 0x0003fff, 0x000fff, 0x0003ff, 0, 0, 0, 0, 0, 0 }));
+                new int[26] { 0x3800000, 0x3800000, 0x3800000, 0x3c00000, 0x3e00000, 0x3f80000, 0x0fc0000, 0x07f0000, 0x03f8000, 0x00fc000, 0x007e000, 0x001f800, 0x000fe00, 
+                                0x007f80, 0x0003fc0, 0x0001fe0, 0x0000ff0, 0x00007f8, 0x00001fc, 0x000007e, 0x3e, 0x1e, 0xe, 0, 0, 0 }));
         }
         if (level >= 0 && level < _levels.Count)
         {  

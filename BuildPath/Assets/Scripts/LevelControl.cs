@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LevelControl : MonoBehaviour
 {
+    [SerializeField] private UI_control _ui_control;
+    [SerializeField] private KolobokMovement _kolobokMovement;
     [SerializeField] private SpawnCandyControl _spawnCandyControl;
     [SerializeField] private SpawnFigControl _spawnFigControl;
     [SerializeField] private LevelEnviroment _levelEnviroment;
@@ -24,6 +26,7 @@ public class LevelControl : MonoBehaviour
         _shemaLevel = ShemaLevel.GetShemaLevel(0);  //  исправить на загрузку по данным из GM
         CreateLevelEnviroment();
         Invoke("CreateCollectFigures", 1f);
+        //Invoke("MoveKolobok", 2f);
     }
 
     // Update is called once per frame
@@ -93,6 +96,8 @@ public class LevelControl : MonoBehaviour
                 if (_levelEnviroment.DoorGridFull())
                 {   //  дорожка построена
                     _isDoorFull = true;
+                    MoveKolobok();
+                    Invoke("ViewEndPanel", 5f);
                 }
                 return true;
             }
@@ -103,5 +108,19 @@ public class LevelControl : MonoBehaviour
     public void RemoveDoorFigure(GameObject door)
     {
         doorFigures.Remove(door);
+    }
+
+    private void MoveKolobok()
+    {
+        List<Vector3> path = new List<Vector3>();
+        path.Add(new Vector3(5.75f, 1f, 1f));
+        path.Add(new Vector3(-5.25f, 1f, -7f));
+        path.Add(new Vector3(-5.25f, 1f, -10f));
+        _kolobokMovement.SetPath(path);
+    }
+
+    private void ViewEndPanel()
+    {
+        _ui_control.ViewEndPanel();
     }
 }
