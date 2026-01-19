@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6580703766623504132}
   - component: {fileID: 6396866129287118526}
+  - component: {fileID: -7263277038372960046}
   m_Layer: 0
   m_Name: TailWater
   m_TagString: Untagged
@@ -54,6 +55,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7263277038372960046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6094533141172323825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af1145ecd988824fba4df0d7c9bd082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9090938629551651618
 GameObject:
   m_ObjectHideFlags: 0

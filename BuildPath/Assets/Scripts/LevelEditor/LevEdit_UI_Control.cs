@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class LevEdit_UI_Control : MonoBehaviour
 {
     [SerializeField] private Text txtLevelName;
+    [SerializeField] private Button btnUndo;
+    [SerializeField] private Button[] btnArr;
 
     private ShemaLevel curLevel = null;
 
@@ -15,7 +17,8 @@ public class LevEdit_UI_Control : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        InterUndo(false);
+        InterBtnArr(false);
     }
 
     // Update is called once per frame
@@ -32,11 +35,24 @@ public class LevEdit_UI_Control : MonoBehaviour
     public void CreateNewLevelShema()
     {
         curLevel = LevelList.Instance.CreateNewShema();
-        txtLevelName.text = curLevel.IDS_LEVEL; 
+        txtLevelName.text = curLevel.IDS_LEVEL;
+        InterBtnArr(true);
     }
 
     public void SaveLevels()
     {
         LevelList.Instance.SaveLevels();
+    }
+
+    public void InterUndo(bool value)
+    {
+        btnUndo.interactable = value;
+    }
+    public void InterBtnArr(bool value)
+    {
+        foreach (var btn in btnArr)
+        {
+            btn.interactable = value;
+        }
     }
 }
