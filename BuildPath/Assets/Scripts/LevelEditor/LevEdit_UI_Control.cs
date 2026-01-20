@@ -20,6 +20,11 @@ public class LevEdit_UI_Control : MonoBehaviour
     private int curIndexNumbers = 0;
     private List<int> numbers = new List<int>();
 
+    // Делегат для уведомления о смене уровня
+    public delegate void LevelChangedEventHandler(ShemaLevel level);
+    public event LevelChangedEventHandler OnLevelChanged;
+
+
     public ShemaLevel Level {  get { return curLevel; } }
 
     // Start is called before the first frame update
@@ -72,7 +77,7 @@ public class LevEdit_UI_Control : MonoBehaviour
     public void OnNumberChanged(string strNumber)
     {
         strNumber = inputNumber.text;
-        print($"input => {strNumber}");
+        //print($"input => {strNumber}");
         if (int.TryParse(strNumber, out int number))
         {
             if (number > 0 && Level != null)
@@ -80,6 +85,13 @@ public class LevEdit_UI_Control : MonoBehaviour
                 Level.SetNumber(number);
             }
         }
+    }
+
+    public void ViewNumberAndIDS()
+    {
+        txtLevelName.text = curLevel.IDS_LEVEL;
+        inputNumber.text = curLevel.NumberLevel.ToString();
+
     }
 
     public void ViewSelectLoadLevelPanel()
@@ -111,7 +123,7 @@ public class LevEdit_UI_Control : MonoBehaviour
 
     public void SelectLoadLevel(int numItem)
     {
-        print($"NumItem => {numItem}");
+        //print($"NumItem => {numItem}");
         GameObject item = items[numItem].gameObject;
         Text btnText = item.transform.GetChild(1).GetChild(0).GetComponent<Text>();
         if (btnText != null && int.TryParse(btnText.text, out int numLevel))
@@ -123,6 +135,7 @@ public class LevEdit_UI_Control : MonoBehaviour
             }
         }
         // Уровень выбран, надо как-то сообщить в LevelBoard о перерисовке уровня
+        OnLevelChanged?.Invoke(curLevel); // Уведомляем подписчиков
         selectLoadLevelPanel.SetActive(false);
     }
 }

@@ -67,7 +67,8 @@ public class ShemaLevel
             x = Convert.ToInt32(s, 16);
             s = ar[3].Substring(2, 2);
             y = Convert.ToInt32(s, 16);
-            _startPoint = new Vector2(x, y);
+            _finishPoint = new Vector2(x, y);
+            //Debug.Log($"ar[2]=>{ar[2]}   start=>{_startPoint}        ar[3]=>{ar[3]}   finish=>{_finishPoint}");
             List<int> tmp = new List<int>();
             for (i = 0; i < 13; i++)
             {

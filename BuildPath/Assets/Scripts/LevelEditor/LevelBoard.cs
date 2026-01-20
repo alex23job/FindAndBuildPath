@@ -27,13 +27,123 @@ public class LevelBoard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Подписываемся на событие смены уровня
+        editControl.OnLevelChanged += ViewCurrentLevel;
+
         CreateGrid();
+    }
+    void OnDestroy()
+    {
+        // Отписываемся от события при уничтожении объекта
+        editControl.OnLevelChanged -= ViewCurrentLevel;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void ViewCurrentLevel(ShemaLevel level)
+    {
+        //print($"Update levelBoard to {level.IDS_LEVEL} {level.NumberLevel}");
+        ClearTails();
+        editControl.ViewNumberAndIDS();
+        int i, j;
+        GameObject tail = null;
+        EditTail et = null;
+        Vector3 posTail = new Vector3(0, 0.5f, 0);
+        int[] ground = level.GetGroundTails();
+        for (j = 0; j < 13; j++)
+        {            
+            posTail.z = ofsY - j - 0.25f;
+            for (i = 0; i < 26; i += 2) 
+            {
+                posTail.x = ofsX + i + 0.5f;
+                int typeTail = (ground[j] >> i) & 0x3;
+                tail = null;
+                switch(typeTail)
+                {
+                    case 1:
+                        tail = Instantiate(holmPrefab, posTail, Quaternion.identity);
+                        break;
+                    case 2:
+                        tail = Instantiate(seePrefab, posTail, Quaternion.identity);
+                        break;
+                    case 3:
+                        tail = Instantiate(forestPrefab, posTail, Quaternion.identity);
+                        break;
+                }
+                if (tail != null)
+                {
+                    et = tail.GetComponent<EditTail>();
+                    if (et != null) { et.SetSize(2); et.SetType(typeTail); et.SetPosition(new Vector2(i, j)); }
+                    tails.Add(tail);
+                }
+            }
+        }
+        int[] door = level.GetDoorFulls();
+        for (j = 0; j < 26; j++)
+        {
+            posTail.z = ofsY - 0.5f * j;
+            for (i = 0; i < 26; i++)
+            {
+                posTail.x = ofsX + i;
+                if ((door[j] & (1 << i)) > 0)
+                {
+                    tail = Instantiate(doorPrefab, posTail, Quaternion.identity);
+                    et = tail.GetComponent<EditTail>();
+                    if (et != null) { et.SetSize(1); et.SetType(4); et.SetPosition(new Vector2(i, j)); }
+                    tails.Add(tail);
+                }
+            }
+        }
+        int[] contur = level.GetDoorGrids();
+        for (j = 0; j < 26; j++)
+        {
+            posTail.z = ofsY - 0.5f * j;
+            for (i = 0; i < 26; i++)
+            {
+                posTail.x = ofsX + i;
+                if ((contur[j] & (1 << i)) > 0)
+                {
+                    tail = Instantiate(conturPrefab, posTail, Quaternion.identity);
+                    et = tail.GetComponent<EditTail>();
+                    if (et != null) { et.SetSize(1); et.SetType(5); et.SetPosition(new Vector2(i, j)); }
+                    tails.Add(tail);
+                }
+            }
+        }
+        Vector2 posStart = level.StartPoint;
+        posTail.z = ofsY - posStart.y - 0.25f;
+        posTail.x = ofsX + posStart.x + 0.5f;
+        tail = Instantiate(startPrefab, posTail, Quaternion.identity);
+        et = tail.GetComponent<EditTail>();
+        if (et != null) { et.SetSize(1); et.SetType(5); et.SetPosition(posStart); }
+        tails.Add(tail);
+        Vector2 posFinish = level.FinishPoint;
+        posTail.z = ofsY - posFinish.y / 2 - 0.25f;
+        posTail.x = ofsX + (posFinish.x / 2) * 2 + 0.5f;
+        tail = Instantiate(finishPrefab, posTail, Quaternion.identity);
+        et = tail.GetComponent<EditTail>();
+        if (et != null) { et.SetSize(1); et.SetType(5); et.SetPosition(posFinish); }
+        tails.Add(tail);
+        //print($"start=>{posStart}   finish=>{posFinish}");
+
+        editControl.InterBtnArr(true);
+        editControl.InterUndo(true);
+    }
+
+    private void ClearTails()
+    {
+        if (tails.Count > 0 )
+        {
+            for(int i = tails.Count - 1; i >= 0; i--)
+            {
+                Destroy(tails[i]);
+            }
+            tails.Clear();
+        }
     }
 
     private void CreateGrid()
