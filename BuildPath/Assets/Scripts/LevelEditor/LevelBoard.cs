@@ -21,6 +21,7 @@ public class LevelBoard : MonoBehaviour
     private List<GameObject> grid = new List<GameObject>();
     private GameObject selectPrefab = null;
     private int selectSize = 0;
+    private int selectType = 0;
     private List<GameObject> tails = new List<GameObject>();
 
     // Start is called before the first frame update
@@ -56,40 +57,47 @@ public class LevelBoard : MonoBehaviour
     {
         selectPrefab = holmPrefab;
         selectSize = 2;
+        selectType = 1;
     }
 
     public void AddSee()
     {
         selectPrefab = seePrefab;
         selectSize = 2;
+        selectType = 2;
     }
 
     public void AddDoor()
     {
         selectPrefab = doorPrefab;
         selectSize = 1;
+        selectType = 4;
     }
 
     public void AddForest()
     {
         selectPrefab = forestPrefab;
         selectSize = 2;
+        selectType = 3;
     }
 
     public void AddContur()
     {
         selectPrefab = conturPrefab;
         selectSize = 1;
+        selectType = 5;
     }
     public void AddStart()
     {
         selectPrefab = startPrefab;
         selectSize = 3;
+        selectType = 6;
     }
     public void AddFinish()
     {
         selectPrefab = finishPrefab;
         selectSize = 3;
+        selectType = 7;
     }
 
     public void Undo()
@@ -98,8 +106,8 @@ public class LevelBoard : MonoBehaviour
         {
             GameObject tail = tails[tails.Count - 1];
             EditTail et = tail.GetComponent<EditTail>();
-
-
+            Vector2 pos = et.Position;
+            editControl.Level.ChangeTails((int)pos.x, (int)pos.y, et.TailType, false);
             Destroy(tail, 0.5f);
             tails.RemoveAt(tails.Count - 1);
         }
@@ -128,7 +136,9 @@ public class LevelBoard : MonoBehaviour
                     posTail.z = ofsY - y / 2 - 0.25f;
                 }
                 GameObject tail = Instantiate(selectPrefab, posTail, Quaternion.identity);
-                //editControl.Level
+                EditTail et = tail.GetComponent<EditTail>();
+                if (et != null) { et.SetSize(selectSize); et.SetType(selectType); et.SetPosition(new Vector2(x, y)); }
+                editControl.Level.ChangeTails(x, y, selectType);
                 tails.Add(tail);
                 editControl.InterUndo(true);
                 selectPrefab = null;

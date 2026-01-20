@@ -161,4 +161,13 @@ public class LevelList : MonoBehaviour
         levels.Add(level);
         return level;
     }
+
+    public ShemaLevel GetShemaLevel(int num)
+    {
+        foreach (ShemaLevel level in levels)
+        {
+            if (level.NumberLevel == num) return level;
+        }
+        return null;
+    }
 }
