@@ -55,6 +55,10 @@ public class LevEdit_UI_Control : MonoBehaviour
         curLevel = LevelList.Instance.CreateNewShema();
         txtLevelName.text = curLevel.IDS_LEVEL;
         InterBtnArr(true);
+        inputNumber.text = "";
+        // Уровень создан, надо как-то сообщить в LevelBoard о перерисовке уровня
+        OnLevelChanged?.Invoke(curLevel); // Уведомляем подписчиков
+
     }
 
     public void SaveLevels()
@@ -91,14 +95,20 @@ public class LevEdit_UI_Control : MonoBehaviour
     {
         txtLevelName.text = curLevel.IDS_LEVEL;
         inputNumber.text = curLevel.NumberLevel.ToString();
-
     }
 
     public void ViewSelectLoadLevelPanel()
     {
         numbers = LevelList.Instance.GetLevelsNumbers();
         curIndexNumbers = 0;
+        if (numbers.Count > items.Length)
+        {
+            int index = Mathf.RoundToInt(scrollbar.value * numbers.Count);
+            if (index > numbers.Count - items.Length) index = numbers.Count - items.Length;
+            curIndexNumbers = index;
+        }
         scrollbar.gameObject.SetActive(numbers.Count > items.Length);
+        scrollbar.size = ((float)items.Length) / numbers.Count; 
         UpdateNumberLevelItems();
         selectLoadLevelPanel.SetActive(true);
     }
@@ -111,7 +121,7 @@ public class LevEdit_UI_Control : MonoBehaviour
             if (curIndexNumbers + i < numbers.Count)
             {
                 Text txtBtn = item.transform.GetChild(1).GetChild(0).GetComponent<Text>();
-                if (txtBtn != null) txtBtn.text = numbers[i].ToString();
+                if (txtBtn != null) txtBtn.text = numbers[curIndexNumbers + i].ToString();
                 item.SetActive(true);
             }
             else
@@ -137,5 +147,15 @@ public class LevEdit_UI_Control : MonoBehaviour
         // Уровень выбран, надо как-то сообщить в LevelBoard о перерисовке уровня
         OnLevelChanged?.Invoke(curLevel); // Уведомляем подписчиков
         selectLoadLevelPanel.SetActive(false);
+    }
+
+    public void OnScrollValueChanged(int value)
+    {
+        float zn = scrollbar.value;
+        int index = Mathf.RoundToInt(zn * numbers.Count);
+        if (index > numbers.Count - 7) index = numbers.Count - 7;
+        //print($"scrollValue = {value}   zn={zn}   index={index}");
+        curIndexNumbers = index;
+        UpdateNumberLevelItems();
     }
 }
