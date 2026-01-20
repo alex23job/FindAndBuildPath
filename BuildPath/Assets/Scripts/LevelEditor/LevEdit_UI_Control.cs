@@ -12,6 +12,8 @@ public class LevEdit_UI_Control : MonoBehaviour
     [SerializeField] private Button[] btnArr;
     [SerializeField] private InputField inputNumber;
 
+    [SerializeField] private Text txtAskDel;
+    [SerializeField] private GameObject askDelPanel;
     [SerializeField] private GameObject selectLoadLevelPanel;
     [SerializeField] private Image[] items;
     [SerializeField] private Scrollbar scrollbar;
@@ -147,6 +149,32 @@ public class LevEdit_UI_Control : MonoBehaviour
         // Уровень выбран, надо как-то сообщить в LevelBoard о перерисовке уровня
         OnLevelChanged?.Invoke(curLevel); // Уведомляем подписчиков
         selectLoadLevelPanel.SetActive(false);
+    }
+
+    public void SelectDeletingLevel(int numItem)
+    {
+        GameObject item = items[numItem].gameObject;
+        Text btnText = item.transform.GetChild(1).GetChild(0).GetComponent<Text>();
+        if (btnText != null && int.TryParse(btnText.text, out int numLevel))
+        {
+            ShemaLevel tmp = LevelList.Instance.GetShemaLevel(numLevel);
+            if (tmp != null)
+            {
+                curLevel = tmp;
+                ViewAskDelPanel();
+            }
+        }
+    }
+
+    private void ViewAskDelPanel()
+    {
+        txtAskDel.text = $"Удалить {curLevel.NumberLevel} уровень?";
+        askDelPanel.SetActive(true);
+    }
+
+    public void DeletingLevel()
+    {
+
     }
 
     public void OnScrollValueChanged(int value)
