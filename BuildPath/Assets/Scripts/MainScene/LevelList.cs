@@ -170,4 +170,14 @@ public class LevelList : MonoBehaviour
         }
         return null;
     }
+
+    public List<int> GetLevelsNumbers()
+    {
+        List<int> numbers = new List<int>();
+        foreach (ShemaLevel level in levels)
+        {
+            numbers.Add(level.NumberLevel);
+        }
+        return numbers;
+    }
 }

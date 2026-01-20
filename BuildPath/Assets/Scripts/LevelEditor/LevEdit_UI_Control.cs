@@ -17,6 +17,8 @@ public class LevEdit_UI_Control : MonoBehaviour
     [SerializeField] private Scrollbar scrollbar;
 
     private ShemaLevel curLevel = null;
+    private int curIndexNumbers = 0;
+    private List<int> numbers = new List<int>();
 
     public ShemaLevel Level {  get { return curLevel; } }
 
@@ -82,12 +84,45 @@ public class LevEdit_UI_Control : MonoBehaviour
 
     public void ViewSelectLoadLevelPanel()
     {
+        numbers = LevelList.Instance.GetLevelsNumbers();
+        curIndexNumbers = 0;
+        scrollbar.gameObject.SetActive(numbers.Count > items.Length);
+        UpdateNumberLevelItems();
         selectLoadLevelPanel.SetActive(true);
+    }
+
+    private void UpdateNumberLevelItems()
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            GameObject item = items[i].gameObject;
+            if (curIndexNumbers + i < numbers.Count)
+            {
+                Text txtBtn = item.transform.GetChild(1).GetChild(0).GetComponent<Text>();
+                if (txtBtn != null) txtBtn.text = numbers[i].ToString();
+                item.SetActive(true);
+            }
+            else
+            {
+                item.SetActive(false);
+            }
+        }
     }
 
     public void SelectLoadLevel(int numItem)
     {
         print($"NumItem => {numItem}");
+        GameObject item = items[numItem].gameObject;
+        Text btnText = item.transform.GetChild(1).GetChild(0).GetComponent<Text>();
+        if (btnText != null && int.TryParse(btnText.text, out int numLevel))
+        {
+            ShemaLevel tmp = LevelList.Instance.GetShemaLevel(numLevel);
+            if (tmp != null)
+            {
+                curLevel = tmp;
+            }
+        }
+        // Уровень выбран, надо как-то сообщить в LevelBoard о перерисовке уровня
         selectLoadLevelPanel.SetActive(false);
     }
 }
