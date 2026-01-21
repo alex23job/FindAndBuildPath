@@ -14,6 +14,9 @@ public class LevelBoard : MonoBehaviour
     [SerializeField] private GameObject ceilPrefab;
     [SerializeField] private GameObject startPrefab;
     [SerializeField] private GameObject finishPrefab;
+    [SerializeField] private GameObject pointPathPrefab;
+    [SerializeField] private GameObject gribPrefab;
+    [SerializeField] private GameObject besedkaPrefab;
 
     [SerializeField] private float ofsX;
     [SerializeField] private float ofsY;
@@ -51,7 +54,7 @@ public class LevelBoard : MonoBehaviour
         if (level.NumberLevel != -1)
         {
             editControl.ViewNumberAndIDS();
-            int i, j;
+            int i, j, x;
             GameObject tail = null;
             EditTail et = null;
             Vector3 posTail = new Vector3(0, 0.5f, 0);
@@ -83,6 +86,23 @@ public class LevelBoard : MonoBehaviour
                         tails.Add(tail);
                     }
                 }
+                x = (ground[j] >> 26) & 0xf;
+                if (x > 0)
+                {
+                    posTail.x = ofsX + 2 * x + 0.5f;
+                    int typeTail = (ground[j] >> 30) & 0x1;
+                    if (typeTail > 0)
+                    {
+                        tail = Instantiate(besedkaPrefab, posTail, Quaternion.identity);
+                    }
+                    else
+                    {
+                        tail = Instantiate(gribPrefab, posTail, Quaternion.identity);
+                    }
+                    et = tail.GetComponent<EditTail>();
+                    if (et != null) { et.SetSize(2); et.SetType(9 + typeTail); et.SetPosition(new Vector2(2 * x, j)); }
+                    tails.Add(tail);
+                }
             }
             int[] door = level.GetDoorFulls();
             for (j = 0; j < 26; j++)
@@ -98,6 +118,16 @@ public class LevelBoard : MonoBehaviour
                         if (et != null) { et.SetSize(1); et.SetType(4); et.SetPosition(new Vector2(i, j)); }
                         tails.Add(tail);
                     }
+                }
+                x = (door[j] >> 26) & 0x1f;
+                if (x > 0)
+                {
+                    //posTail.z = ofsY - 0.5f * j;
+                    posTail.x = ofsX + x;
+                    tail = Instantiate(pointPathPrefab, posTail, Quaternion.identity);
+                    et = tail.GetComponent<EditTail>();
+                    if (et != null) { et.SetSize(2); et.SetType(8); et.SetPosition(new Vector2(x, j)); }
+                    tails.Add(tail);
                 }
             }
             int[] contur = level.GetDoorGrids();
@@ -125,7 +155,8 @@ public class LevelBoard : MonoBehaviour
             tails.Add(tail);
             Vector2 posFinish = level.FinishPoint;
             posTail.z = ofsY - posFinish.y / 2 - 0.25f;
-            posTail.x = ofsX + (posFinish.x / 2) * 2 + 0.5f;
+            //posTail.x = ofsX + (posFinish.x / 2) * 2 + 0.5f;
+            posTail.x = ofsX + posFinish.x + 0.5f;
             tail = Instantiate(finishPrefab, posTail, Quaternion.identity);
             et = tail.GetComponent<EditTail>();
             if (et != null) { et.SetSize(1); et.SetType(5); et.SetPosition(posFinish); }
@@ -212,6 +243,27 @@ public class LevelBoard : MonoBehaviour
         selectType = 7;
     }
 
+    public void AddPointPath()
+    {
+        selectPrefab = pointPathPrefab;
+        selectSize = 2;
+        selectType = 8;
+    }
+
+    public void AddGrib()
+    {
+        selectPrefab = gribPrefab;
+        selectSize = 2;
+        selectType = 9;
+    }
+
+    public void AddBesedka()
+    {
+        selectPrefab = besedkaPrefab;
+        selectSize = 2;
+        selectType = 10;
+    }
+
     public void Undo()
     {
         if (tails.Count > 0)
@@ -246,6 +298,8 @@ public class LevelBoard : MonoBehaviour
                 {
                     posTail.x = ofsX + (x / 2) * 2 + 0.5f;
                     posTail.z = ofsY - y / 2 - 0.25f;
+                    x = (x / 2) * 2;
+                    y = (y / 2) * 2;
                 }
                 GameObject tail = Instantiate(selectPrefab, posTail, Quaternion.identity);
                 EditTail et = tail.GetComponent<EditTail>();

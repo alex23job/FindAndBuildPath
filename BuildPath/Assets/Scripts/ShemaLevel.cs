@@ -148,6 +148,16 @@ public class ShemaLevel
                 if (isSet == false) _finishPoint = Vector2.zero;
                 else _finishPoint = new Vector2(x, y);
                     break;
+            case 8:
+                _doorFulls[y] ^= x << 26;
+                break;
+            case 9:
+                _groundTails[y / 2] ^= (x / 2) << 26;
+                break;
+            case 10:
+                _groundTails[y / 2] ^= (x / 2) << 26;
+                _groundTails[y / 2] ^= 1 << 30;
+                break;
             default:
                 Debug.Log($"Неизвестный тип части {tailType}");
                 break;

@@ -180,4 +180,23 @@ public class LevelList : MonoBehaviour
         }
         return numbers;
     }
+
+    public List<int> GetLevelsNumbersAndDelLevel(int numLevel)
+    {
+        List<int> numbers = new List<int>();
+        for (int i = levels.Count; i > 0; i--)
+        {
+            if (levels[i - 1].NumberLevel == numLevel)
+            {
+                levels.RemoveAt(i - 1);
+                SaveLevels();
+                break;
+            }
+        }
+        foreach (ShemaLevel level in levels)
+        {
+            numbers.Add(level.NumberLevel);
+        }
+        return numbers;
+    }
 }

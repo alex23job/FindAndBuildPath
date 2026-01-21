@@ -38,6 +38,7 @@ public class LevelControl : MonoBehaviour
     private void CreateLevelEnviroment()
     {
         _levelEnviroment.SetShemaLevel(_shemaLevel);
+        _levelEnviroment.SetKolobok(_kolobokMovement.transform);
     }
 
     private void CreateCollectFigures()

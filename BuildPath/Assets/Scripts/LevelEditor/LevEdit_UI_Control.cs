@@ -174,7 +174,19 @@ public class LevEdit_UI_Control : MonoBehaviour
 
     public void DeletingLevel()
     {
-
+        askDelPanel.SetActive(false);
+        numbers = LevelList.Instance.GetLevelsNumbersAndDelLevel(curLevel.NumberLevel);
+        curLevel = null;
+        curIndexNumbers = 0;
+        if (numbers.Count > items.Length)
+        {
+            int index = Mathf.RoundToInt(scrollbar.value * numbers.Count);
+            if (index > numbers.Count - items.Length) index = numbers.Count - items.Length;
+            curIndexNumbers = index;
+        }
+        scrollbar.gameObject.SetActive(numbers.Count > items.Length);
+        scrollbar.size = ((float)items.Length) / numbers.Count;
+        UpdateNumberLevelItems();
     }
 
     public void OnScrollValueChanged(int value)

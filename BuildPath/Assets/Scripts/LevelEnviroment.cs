@@ -7,6 +7,8 @@ public class LevelEnviroment : MonoBehaviour
     [SerializeField] private GameObject prefabTailBody;
     [SerializeField] private GameObject[] envPrefabs;
     [SerializeField] private GameObject gridCeilPrefab;
+    [SerializeField] private GameObject startPrefab;
+    [SerializeField] private GameObject finishPrefab;
     [SerializeField] private float ofsX;
     [SerializeField] private float ofsZ;
 
@@ -42,7 +44,8 @@ public class LevelEnviroment : MonoBehaviour
             for (j = 0; j < 13; j++)
             {
                 num = (tails[i] >> (2 * j)) & 0x3;
-                pos.x = ofsX + j * 1f;                
+                pos.x = ofsX + j * 1f;
+                pos.y = (num == 1) ? 0f : 0.25f;
                 GameObject env = Instantiate(envPrefabs[num], pos, Quaternion.Euler(rot));
                 env.transform.parent = transform;
             }
@@ -70,6 +73,11 @@ public class LevelEnviroment : MonoBehaviour
                 }
             }
         }
+        Vector2 startPos = _shemaLevel.StartPoint;
+        pos.y = 0.5f;
+        pos.x = ofsX + startPos.x - 0.25f;
+        pos.z = ofsZ - startPos.y;
+        GameObject start = Instantiate(startPrefab, pos, Quaternion.identity);
     }
 
     public bool CheckPacking(GameObject door)
@@ -115,5 +123,14 @@ public class LevelEnviroment : MonoBehaviour
             if (_doorGrid[i] == 0) return false;
         }
         return true;
+    }
+
+    public void SetKolobok(Transform transformKolobok)
+    {
+        Vector3 startPos = Vector3.zero;
+        startPos.x = ofsX + _shemaLevel.StartPoint.x - 0.25f;
+        startPos.y = 1.5f;
+        startPos.z = ofsZ - _shemaLevel.StartPoint.y + 1.3f;
+        transformKolobok.position = startPos;
     }
 }
