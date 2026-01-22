@@ -20,6 +20,8 @@ public class Main_UI_Control : MonoBehaviour
     void Start()
     {
         UpdateLevelsButton();
+        LevelList.CurrentLevel = _curLevel;
+        LevelList.MaxLevel = _maxLevel;
     }
 
     // Update is called once per frame
@@ -47,6 +49,7 @@ public class Main_UI_Control : MonoBehaviour
             _imgLevels[_curLevel].color = _noSelectColor;
             _curLevel = num;
             _imgLevels[num].color = _selectColor;
+            LevelList.CurrentLevel = _curLevel;
         }
     }
 

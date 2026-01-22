@@ -90,6 +90,9 @@ public class LevelList : MonoBehaviour
 
     public static List<ShemaLevel> levels = new List<ShemaLevel>();
 
+    public static int CurrentLevel = 0;
+    public static int MaxLevel = 0;
+
     private void Awake()
     {
         if (Instance == null)

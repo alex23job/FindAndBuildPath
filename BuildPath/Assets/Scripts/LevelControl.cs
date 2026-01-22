@@ -19,11 +19,18 @@ public class LevelControl : MonoBehaviour
 
     private ShemaLevel _shemaLevel = null;
     private bool _isDoorFull = false;
+    private bool _isNoLevel = true;
 
     // Start is called before the first frame update
     void Start()
     {
         _shemaLevel = ShemaLevel.GetShemaLevel(0);  //  исправить на загрузку по данным из GM
+        ShemaLevel tmp = LevelList.Instance.GetShemaLevel(LevelList.CurrentLevel);
+        if (tmp != null)
+        {
+            _shemaLevel = tmp;
+            _isNoLevel = false;
+        }
         CreateLevelEnviroment();
         Invoke("CreateCollectFigures", 1f);
         //Invoke("MoveKolobok", 2f);
@@ -114,10 +121,17 @@ public class LevelControl : MonoBehaviour
     private void MoveKolobok()
     {
         List<Vector3> path = new List<Vector3>();
-        path.Add(new Vector3(5.75f, 1f, 1f));
-        path.Add(new Vector3(-5.25f, 1f, -7f));
-        path.Add(new Vector3(-5.25f, 1f, -10f));
-        _kolobokMovement.SetPath(path);
+        if (_isNoLevel)
+        {
+            path.Add(new Vector3(5.75f, 1f, 1f));
+            path.Add(new Vector3(-5.25f, 1f, -7f));
+            path.Add(new Vector3(-5.25f, 1f, -10f));
+        }
+        else
+        {
+            path = _levelEnviroment.GetPathPoints();
+        }
+            _kolobokMovement.SetPath(path);
     }
 
     private void ViewEndPanel()
