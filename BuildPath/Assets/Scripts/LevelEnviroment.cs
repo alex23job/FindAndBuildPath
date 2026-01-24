@@ -30,7 +30,7 @@ public class LevelEnviroment : MonoBehaviour
         
     }
 
-    public void SetShemaLevel(ShemaLevel sh)
+    public FinishTrigger SetShemaLevel(ShemaLevel sh)
     {
         _shemaLevel = sh;
         int i, j, num, x, typeForest = 0;
@@ -124,6 +124,8 @@ public class LevelEnviroment : MonoBehaviour
         pos.z = ofsZ - 0.5f * finishPos.y + 0.25f;
         GameObject finish = Instantiate(finishPrefab, pos, Quaternion.identity);
         finish.transform.parent = transform;
+        FinishTrigger ft = finish.transform.GetComponentInChildren<FinishTrigger>();
+        return ft;
     }
 
     public List<Vector3> GetPathPoints()
@@ -134,12 +136,13 @@ public class LevelEnviroment : MonoBehaviour
         Vector3 point = new Vector3(0, 1f, 0);
         for (y = 0; y < fullDoors.Length; y++)
         {
-            x = (fullDoors[y] >> 26) & 0x0F;
+            x = (fullDoors[y] >> 26) & 0x1F;
             if (x > 0)
             {
                 point.x = ofsX + 0.5f * x - 0.25f;
                 point.z = ofsZ - 0.5f * y + 0.25f;
                 pathPoints.Add(point);
+                print($"y={y}  x={x}   point=>{point}");
             }
         }
         return pathPoints;

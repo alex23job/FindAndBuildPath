@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UI_control : MonoBehaviour
 {
     [SerializeField] private GameObject _endPanel;
+    [SerializeField] private Text _txtNumLevel;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,12 @@ public class UI_control : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ViewNumberLevel(int level)
+    {
+        string label = "Lvl.";
+        _txtNumLevel.text = $"{label} {level}";
     }
 
     public void ViewEndPanel()

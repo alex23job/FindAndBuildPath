@@ -37,12 +37,25 @@ public class SpawnFigControl : MonoBehaviour
         }
     }
 
-    public void CreateFigure(int num)
+    public void CreateFigure(int num, int numberShema = -1)
     {
         GameObject fig = Instantiate(_prefabCollectFigure, transform.position, Quaternion.identity);
         int numShema = Random.Range(0, ShemaFigure.MaxShemaCounts);
+        if (numberShema != -1) numShema = numberShema;
         fig.GetComponent<CollectFigControl>().SetShema(num, ShemaFigure.GetShemaOrder(numShema).GetShema(), _spawnPoints[num], gameObject.GetComponent<SpawnFigControl>(), numShema);
         _figures[num] = fig;
+    }
+
+    public void CreateSimpleFigure()
+    {
+        int i;
+        for (i = _figures.Count - 1; i >= 0; i--)
+        {
+            _completeFigures.Add(_figures[i]);
+            _figures[i] = null;
+            CreateFigure(i, i % 3);
+            Invoke("RemoveCompleteFigure", 0.3f);
+        }
     }
 
     public bool CheckCandy(int candyID, Vector3 pos, int figureNum)

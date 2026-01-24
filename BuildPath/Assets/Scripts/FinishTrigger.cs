@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class FinishTrigger : MonoBehaviour
 {
+    // Делегат для уведомления о конце уровня
+    public delegate void LevelFinishEventHandler();
+    public event LevelFinishEventHandler OnLevelFinish;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,8 +33,14 @@ public class FinishTrigger : MonoBehaviour
             KolobokMovement km = other.gameObject.GetComponent<KolobokMovement>();
             if (km != null)
             {
-                km.StopMove();                
+                km.StopMove();
+                Invoke("KolobokFinished", 1.5f);
             }
         }
+    }
+
+    private void KolobokFinished()
+    {
+        OnLevelFinish?.Invoke(); // Уведомляем подписчиков
     }
 }

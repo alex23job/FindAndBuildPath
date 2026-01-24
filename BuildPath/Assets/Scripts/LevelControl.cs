@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class LevelControl : MonoBehaviour
@@ -20,6 +21,7 @@ public class LevelControl : MonoBehaviour
     private ShemaLevel _shemaLevel = null;
     private bool _isDoorFull = false;
     private bool _isNoLevel = true;
+    private FinishTrigger _finishTrigger = null;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,7 @@ public class LevelControl : MonoBehaviour
             _shemaLevel = tmp;
             _isNoLevel = false;
         }
+        _ui_control.ViewNumberLevel(_shemaLevel.NumberLevel);
         CreateLevelEnviroment();
         Invoke("CreateCollectFigures", 1f);
         //Invoke("MoveKolobok", 2f);
@@ -42,9 +45,25 @@ public class LevelControl : MonoBehaviour
         
     }
 
+    private void OnDisable()
+    {
+        if (_finishTrigger != null)
+        {
+            // Отписываемся от события при уничтожении объекта
+            _finishTrigger.OnLevelFinish -= ViewEndPanel;
+        }
+    }
+
     private void CreateLevelEnviroment()
     {
-        _levelEnviroment.SetShemaLevel(_shemaLevel);
+        _finishTrigger = _levelEnviroment.SetShemaLevel(_shemaLevel);
+        if (_finishTrigger != null)
+        {
+            // Подписываемся на событие смены уровня
+            _finishTrigger.OnLevelFinish += ViewEndPanel;
+
+
+        }
         _levelEnviroment.SetKolobok(_kolobokMovement.transform);
     }
 
@@ -105,7 +124,7 @@ public class LevelControl : MonoBehaviour
                 {   //  дорожка построена
                     _isDoorFull = true;
                     MoveKolobok();
-                    Invoke("ViewEndPanel", 5f);
+                    //Invoke("ViewEndPanel", 5f);
                 }
                 return true;
             }
@@ -137,5 +156,15 @@ public class LevelControl : MonoBehaviour
     private void ViewEndPanel()
     {
         _ui_control.ViewEndPanel();
+    }
+
+    public void OnRewardedClick()
+    {
+        GenerateSimpleFigure();
+    }
+
+    public void GenerateSimpleFigure()
+    {
+        _spawnFigControl.CreateSimpleFigure();
     }
 }

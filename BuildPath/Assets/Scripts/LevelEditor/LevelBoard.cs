@@ -246,7 +246,7 @@ public class LevelBoard : MonoBehaviour
     public void AddPointPath()
     {
         selectPrefab = pointPathPrefab;
-        selectSize = 2;
+        selectSize = 1;
         selectType = 8;
     }
 
